@@ -8,16 +8,27 @@
     </div>
 
     <div class="calendar">
-      <div v-for="day in weekDays" :key="day" class="calendar-weekdays">
-        {{ day }}
+      <div class="row">
+        <div v-for="day in weekDays" :key="day" class="calendar-weekdays">
+          {{ day }}
+        </div>
       </div>
-      <CalendarBox
-        v-for="date in totalBoxes"
-        :key="date"
-        :date="date"
-        :calendarData="calendarData"
-        :currentCalendar="currentCalendar"
-      />
+
+      <div class="calendar-inner">
+        <div
+          class="row"
+          v-for="row in Math.round(totalBoxes.length / 7)"
+          :key="row"
+        >
+          <CalendarBox
+            v-for="date in filterBoxes(row, 7)"
+            :key="date"
+            :date="date"
+            :calendarData="calendarData"
+            :currentCalendar="currentCalendar"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -119,6 +130,11 @@ export default {
     showNextMonth() {
       this.currentCalendar = new Date(this.currentYear, this.currentMonth + 1);
     },
+    filterBoxes(row, weekDays) {
+      return this.totalBoxes.filter(
+        (x, i) => i >= weekDays * (row - 1) && i < weekDays * row
+      );
+    },
   },
 };
 </script>
@@ -131,21 +147,37 @@ html {
   text-align: center;
 }
 .calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: 30px 1fr 1fr 1fr 1fr 1fr;
   text-align: center;
-  border: 1px solid #ede5e56b;
-  grid-gap: 1px;
-  background-color: #ede5e56b;
+}
+
+.calendar-inner {
+  border: 1px solid #e0dcdc;
+}
+
+.row {
+  display: flex;
 }
 .calendar-weekdays {
   padding: 5px;
+  flex: 1;
 }
+
 .calendar-box {
   padding: 8px 5px;
-  background-color: white;
+  flex: 1;
+  border-bottom: 1px solid #e0dcdc;
+  border-right: 1px solid #e0dcdc;
+  min-height: 110px;
 }
+
+.row .calendar-box:last-of-type {
+  border-right: none;
+}
+
+.calendar-inner .row:last-of-type .calendar-box {
+  border-bottom: none;
+}
+
 .meetings-item {
   margin: 10px 0;
   color: #919191;
@@ -159,7 +191,7 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 275px;
+  max-width: 280px;
   margin-bottom: 20px;
   font-size: 20px;
   text-align: center;
@@ -174,6 +206,6 @@ html {
 }
 
 .month-selector span {
-  flex: 2;
+  flex: 3;
 }
 </style>

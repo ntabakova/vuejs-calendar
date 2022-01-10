@@ -1,9 +1,6 @@
 <template>
-  <div class="calendar-box">
-    <div
-      :class="['calendar-box-inner', { 'has-extra': allMeetings.length > 3 }]"
-      @click="showModal"
-    >
+  <div :class="['calendar-box', { 'has-extra': allMeetings.length > 3 }]">
+    <div class="calendar-box-inner" @click="showModal">
       <div :class="['day', date.type]">{{ date.day }}</div>
       <div class="meetings" v-if="allMeetings[0]">
         <Meeting
@@ -85,11 +82,12 @@ export default {
 </script>
 
 <style scoped>
-.calendar-box-inner.has-extra:hover {
+.calendar-box.has-extra:hover {
   cursor: pointer;
 }
 .day {
   margin-bottom: 15px;
+  font-size: 13px;
 }
 
 .day.prev,
