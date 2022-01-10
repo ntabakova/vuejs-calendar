@@ -7,9 +7,9 @@
       <span class="close" @click="closeModal">&times;</span>
       <div class="meetings">
         <Meeting
+          v-for="meeting in meetings"
+          :key="JSON.stringify(meeting)"
           :meeting="meeting"
-          v-for="(meeting, index) in meetings"
-          :key="index"
         />
       </div>
     </div>

@@ -4,8 +4,8 @@
       <div :class="['day', date.type]">{{ date.day }}</div>
       <div class="meetings" v-if="allMeetings[0]">
         <Meeting
-          v-for="(meeting, index) in firstMeetings"
-          :key="index"
+          v-for="meeting in firstMeetings"
+          :key="JSON.stringify(meeting)"
           :meeting="meeting"
           :in-calendar-box="true"
         />
@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     filterMeetings(date) {
-      let meetings = this.calendarData.meetings
+      this.allMeetings = this.calendarData.meetings
         .filter(
           (x) =>
             new Date(x.start) >= date.date &&
@@ -69,10 +69,8 @@ export default {
           return new Date(x.start) - new Date(y.start);
         });
 
-      this.allMeetings = [...meetings];
-
       // show only the first 3 meetings
-      this.firstMeetings = meetings.filter((x, index) => index < 3);
+      this.firstMeetings = this.allMeetings.filter((x, index) => index < 3);
     },
     showModal() {
       if (this.allMeetings.length > 3) this.modalIsOpen = true;

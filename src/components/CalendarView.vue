@@ -22,7 +22,7 @@
         >
           <CalendarBox
             v-for="date in filterBoxes(row, 7)"
-            :key="date"
+            :key="date.date"
             :date="date"
             :calendarData="calendarData"
             :currentCalendar="currentCalendar"
@@ -105,13 +105,21 @@ export default {
         0
       ).getDate();
 
+      // Previous month boxes
+      let prevMonthStart = 0;
       for (let i = 1; i <= this.daysOfPrevMonth; i++) {
-        this.totalBoxes.push({ type: "prev", day: lastDayOfPrevMonth });
-        lastDayOfPrevMonth--;
-      }
+        this.totalBoxes.push({
+          type: "prev",
+          day: lastDayOfPrevMonth,
+          date: new Date(this.currentYear, this.currentMonth, prevMonthStart),
+        });
 
+        lastDayOfPrevMonth--;
+        prevMonthStart--;
+      }
       this.totalBoxes.reverse();
 
+      // Current month boxes
       for (let i = 1; i <= this.daysOfCurrentMonth; i++) {
         this.totalBoxes.push({
           type: "current",
@@ -120,8 +128,13 @@ export default {
         });
       }
 
+      // Next month boxes
       for (let i = 1; i <= this.daysOfNextMonth; i++) {
-        this.totalBoxes.push({ type: "next", day: i });
+        this.totalBoxes.push({
+          type: "next",
+          day: i,
+          date: new Date(this.currentYear, this.currentMonth + 1, i),
+        });
       }
     },
     showPrevMonth() {
@@ -193,6 +206,9 @@ html {
 @media (min-width: 1024px) {
   .container {
     margin: 0 15px;
+  }
+  .calendar-box {
+    min-height: 145px;
   }
 }
 .month-selector {
