@@ -163,7 +163,6 @@ html {
 }
 
 .calendar-box {
-  padding: 8px 5px;
   flex: 1;
   border-bottom: 1px solid #e0dcdc;
   border-right: 1px solid #e0dcdc;
@@ -176,6 +175,15 @@ html {
 
 .calendar-inner .row:last-of-type .calendar-box {
   border-bottom: none;
+}
+
+.calendar-box-inner {
+  height: calc(100% - 16px);
+  padding: 8px 5px;
+}
+
+.calendar-box.has-extra .calendar-box-inner:hover {
+  cursor: pointer;
 }
 
 .meetings-item {
@@ -207,5 +215,15 @@ html {
 
 .month-selector span {
   flex: 3;
+}
+
+.day {
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.day.prev,
+.day.next {
+  color: #dfd8d8;
 }
 </style>
