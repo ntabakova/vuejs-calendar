@@ -74,12 +74,12 @@ export default {
   width: 80%;
   max-width: 500px;
   position: relative;
-  margin-top: 20%;
+  top: 21%;
   box-shadow: 0px 5px 25px 5px #afabab7a;
 }
 .date {
   margin-bottom: 20px;
-  font-size: 22px;
+  font-size: 20px;
 }
 .close {
   position: absolute;

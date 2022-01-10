@@ -39,6 +39,7 @@ export default {
       currentCalendar: new Date(2020, 5, 1),
       daysOfPrevMonth: null,
       daysOfCurrentMonth: null,
+      daysOfNextMonth: null,
       totalBoxes: [],
     };
   },
@@ -73,16 +74,32 @@ export default {
       ).getDate();
 
       let firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1);
-      let weekDay = firstDayOfMonth.toLocaleDateString("en-us", {
+      let firstWeekDay = firstDayOfMonth.toLocaleDateString("en-us", {
         weekday: "short",
       });
 
-      // empty boxes of the week before start of the month
-      this.daysOfPrevMonth = this.weekDays.indexOf(weekDay);
+      let lastDayOfMonth = new Date(this.currentYear, this.currentMonth + 1, 0);
+      let lastWeekDay = lastDayOfMonth.toLocaleDateString("en-us", {
+        weekday: "short",
+      });
+
+      // empty days of the week before start and after end of the month
+      this.daysOfPrevMonth = this.weekDays.indexOf(firstWeekDay);
+      this.daysOfNextMonth =
+        this.weekDays.length - this.weekDays.indexOf(lastWeekDay) - 1;
+
+      let lastDayOfPrevMonth = new Date(
+        this.currentYear,
+        this.currentMonth,
+        0
+      ).getDate();
 
       for (let i = 1; i <= this.daysOfPrevMonth; i++) {
-        this.totalBoxes.push({ type: "prev" });
+        this.totalBoxes.push({ type: "prev", day: lastDayOfPrevMonth });
+        lastDayOfPrevMonth--;
       }
+
+      this.totalBoxes.reverse();
 
       for (let i = 1; i <= this.daysOfCurrentMonth; i++) {
         this.totalBoxes.push({
@@ -90,6 +107,10 @@ export default {
           day: i,
           date: new Date(this.currentYear, this.currentMonth, i),
         });
+      }
+
+      for (let i = 1; i <= this.daysOfNextMonth; i++) {
+        this.totalBoxes.push({ type: "next", day: i });
       }
     },
     showPrevMonth() {
@@ -112,15 +133,18 @@ html {
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 30px 1fr 1fr 1fr 1fr 1fr;
   text-align: center;
+  border: 1px solid #ede5e56b;
+  grid-gap: 1px;
+  background-color: #ede5e56b;
 }
 .calendar-weekdays {
   padding: 5px;
 }
 .calendar-box {
   padding: 8px 5px;
-  min-height: 112px;
-  border: 1px solid #ede5e56b;
+  background-color: white;
 }
 .meetings-item {
   margin: 10px 0;
@@ -129,9 +153,6 @@ html {
 @media (min-width: 1024px) {
   .container {
     margin: 0 15px;
-  }
-  .calendar-box {
-    min-height: 160px;
   }
 }
 .month-selector {
@@ -153,6 +174,6 @@ html {
 }
 
 .month-selector span {
-  flex: 3;
+  flex: 2;
 }
 </style>

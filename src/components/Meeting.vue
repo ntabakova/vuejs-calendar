@@ -1,9 +1,20 @@
 <template>
-  <div class="meetings-item">
-    <span>{{ getTime(meeting.start) }}</span>
-    <span :class="['name', { main: inCalendarBox }]"
-      >{{ meeting.name }} ({{ meeting.meetingRoom }})</span
+  <div :class="['meetings-item', { main: inCalendarBox }]">
+    <div>
+      <span class="start">{{ getTime(meeting.start) }}</span>
+      <span
+        class="end"
+        v-if="screenSize > 768 || (screenSize < 768 && !inCalendarBox)"
+      >
+        - {{ getTime(meeting.end) }}</span
+      >
+    </div>
+    <div
+      class="name"
+      v-if="screenSize > 1024 || (screenSize < 1024 && !inCalendarBox)"
     >
+      {{ meeting.name }} ({{ meeting.meetingRoom }})
+    </div>
   </div>
 </template>
 
@@ -19,7 +30,12 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      screenSize: window.innerWidth,
+    };
+  },
+  created() {
+    window.addEventListener("resize", this.onResize);
   },
   methods: {
     getTime(date) {
@@ -29,20 +45,15 @@ export default {
         timeZone: "UTC",
       });
     },
+    onResize() {
+      this.screenSize = window.innerWidth;
+    },
   },
 };
 </script>
 
 <style scoped>
-.name {
-  margin-left: 5px;
-}
-.name.main {
-  display: none;
-}
-@media (min-width: 1024px) {
-  .name.main {
-    display: inline;
-  }
+.meetings-item.main {
+  font-size: 13px;
 }
 </style>

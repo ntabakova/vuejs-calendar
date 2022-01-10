@@ -4,7 +4,7 @@
       :class="['calendar-box-inner', { 'has-extra': allMeetings.length > 3 }]"
       @click="showModal"
     >
-      <div class="day">{{ date.day }}</div>
+      <div :class="['day', date.type]">{{ date.day }}</div>
       <div class="meetings" v-if="allMeetings[0]">
         <Meeting
           v-for="(meeting, index) in firstMeetings"
@@ -90,5 +90,10 @@ export default {
 }
 .day {
   margin-bottom: 15px;
+}
+
+.day.prev,
+.day.next {
+  color: #dfd8d8;
 }
 </style>
